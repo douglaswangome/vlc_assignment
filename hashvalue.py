@@ -32,6 +32,6 @@ def get_expected_hashvalue():
   file_content = response.content
   image_hash = hashlib.sha256(file_content).hexdigest()
 
-  print(image_hash)
+  return image_hash
 
 get_expected_hashvalue()
