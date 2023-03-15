@@ -1,11 +1,14 @@
 from bs4 import BeautifulSoup
+import hashlib
 import requests
 import platform
 
-def assign_target_url():
+def assign_file_url():
+  """Get latest version & platform, add it to the url then return to the url"""
   bit = ""
   vlc_url = "https://www.videolan.org/vlc/download-windows.html"
   response = requests.get(vlc_url)
+  response.raise_for_status()
   vlc_page = response.text
 
   soup = BeautifulSoup(vlc_page, "html.parser")
@@ -17,10 +20,18 @@ def assign_target_url():
   elif platform.machine().endswith("64"):
     bit = "64"
 
-  target_url = f"http://download.videolan.org/pub/videolan/vlc/{version}/win{bit}/"
-  return target_url
+  url = f"http://download.videolan.org/pub/videolan/vlc/{version}/win{bit}/"
+  return url
 
 def get_expected_hashvalue():
-  print(assign_target_url())
+  """Get and return expected hash value"""
+  file_url = assign_file_url()
+  response = requests.get(file_url)
+  response.raise_for_status()
+
+  file_content = response.content
+  image_hash = hashlib.sha256(file_content).hexdigest()
+
+  print(image_hash)
 
 get_expected_hashvalue()
