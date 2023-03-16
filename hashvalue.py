@@ -4,7 +4,7 @@ import requests
 import platform
 
 def get_software_info():
-  """Get the VLC latest"""
+  """Get the VLC latest version info and the number of bits your comoputer runs on"""
   # Get the amount of bits
   bit = ""
 
